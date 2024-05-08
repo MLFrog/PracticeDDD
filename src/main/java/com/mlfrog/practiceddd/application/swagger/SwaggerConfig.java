@@ -1,4 +1,4 @@
-package com.mlfrog.practiceddd.infrastructure.swagger;
+package com.mlfrog.practiceddd.application.swagger;
 
 import java.util.Arrays;
 
