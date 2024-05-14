@@ -1,40 +1,59 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>Study DDD project</title>
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>Study DDD project</title>
+<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+<link href="css/sb-admin-2.min.css" rel="stylesheet">
 </head>
 <body id="page-top">
-    <div id="wrapper">
-    	<header th:replace="common/Sidebar::header"></header>
-	    <div id="content-wrapper" class="d-flex flex-column">
-	    	<div id="content">
-	        	<header th:replace="common/Header::header"></header>
-		         <div class="container-fluid">
-		
-		       		<!-- 메인 화면 채울 땐 여기 안에 채우면   -->
-				
-		        </div>
-	        </div>
-	    	<footer th:replace="common/Footer::footer"></footer>
+	<div id="wrapper">
+		<header th:replace="common/Sidebar::header"></header>
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<header th:replace="common/Header::header"></header>
+				<div class="container-fluid">
+					<div class="float-right" style="margin: 20px 5%;">
+						<a role="button" class="btn btn-primary" href="BoardWrite">글 작성하기</a>
+					</div>
+					<div class="container">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th scope="col">#</th>
+									<th scope="col">제목</th>
+									<th scope="col">작성자</th>
+									<th scope="col">작성일시</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="question, loop : ${questionList}">
+									<td th:text="${question.board_id}"></td>
+									<td><a th:href="@{|/question/detail/${question.board_id}|}" th:text="${question.title}"></a></td>
+									<td><a th:text="${question.nickname}"></a></td>
+									<td th:text="${#temporals.format(question.created_at 'yyyy-MM-dd HH:mm')}"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<footer th:replace="common/Footer::footer"></footer>
 		</div>
-    </div>
-    
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-    <script src="js/sb-admin-2.min.js"></script>
-    <script src="vendor/chart.js/Chart.min.js"></script>
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
+	</div>
+
+	<script src="vendor/jquery/jquery.min.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+	<script src="js/sb-admin-2.min.js"></script>
+	<script src="vendor/chart.js/Chart.min.js"></script>
+	<script src="js/demo/chart-area-demo.js"></script>
+	<script src="js/demo/chart-pie-demo.js"></script>
 </body>
 
 </html>
