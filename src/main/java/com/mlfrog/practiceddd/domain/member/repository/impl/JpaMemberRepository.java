@@ -47,9 +47,12 @@ public class JpaMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Boolean isMember(String loginId) {
-        return null;
+    public Member findOnebyId(String loginId) {
+        MemberJpaEntity mDomain = jpaRepository.findByLoginId(loginId.toString());
+        if(mDomain!=null) return this.converter.convert(mDomain);
+        else return null;
     }
+
 
     @Override
     public String getMemberIdByEmail(String email) {

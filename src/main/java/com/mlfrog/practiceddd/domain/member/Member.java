@@ -22,6 +22,7 @@ public class Member {
     private Instant createdAt;
     private Instant updatedAt;
 
+    //멤버 정보 저장
     public void save(MemberRepository repository) {
         Assert.notNull(this.loginId, "Member loginId 값은 null일 수 없습니다.");
 
@@ -29,9 +30,9 @@ public class Member {
     }
 
     //중복 회원 체크
-    public boolean checkDupMember(MemberRepository repository){
+    public Member checkDupId(MemberRepository repository){
         Assert.notNull(this.loginId, "loginId는 필수값 입니다.");
 
-        return repository.isMember(this.loginId);
+        return repository.findOnebyId(this.loginId);
     }
 }
