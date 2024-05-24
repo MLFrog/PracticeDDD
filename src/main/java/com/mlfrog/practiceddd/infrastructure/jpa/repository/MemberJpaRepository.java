@@ -10,8 +10,6 @@ import java.util.List;
 public interface MemberJpaRepository extends JpaRepository<MemberJpaEntity, Long> {
     MemberJpaEntity findByLoginId(String loginId); //회원 로그인아이디로 row 조회
 
-//    MemberJpaEntity save(MemberJEntity member); //회원가입시 회원정보 저장
-
     List<MemberJpaEntity> findAll(); //리스트 형태로 회원정보 전체조회
 
 }

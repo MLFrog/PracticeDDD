@@ -2,8 +2,6 @@ package com.mlfrog.practiceddd.infrastructure.jpa.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.apache.ibatis.type.Alias;
 
 import java.sql.Timestamp;
 
