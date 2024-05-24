@@ -23,6 +23,18 @@
 					$(this).val(input);
 				}
 			});
+
+			$("#selectEmailType").change(function() {
+				var selectedValue = $(this).val();
+				if (selectedValue === "직접입력") {
+					$("#EmailType").prop("disabled", false).val("").focus();
+				} else {
+					$("#EmailType").prop("disabled", true).val(selectedValue);
+				}
+			});
+
+			$("#EmailType").val($("#selectEmailType").val());
+
 		});
 	</script>
 </head>
@@ -46,18 +58,22 @@
 						<div class="col-md-6">
 							<input type="text" class="form-control" id="inputPasswordChk" placeholder="비밀번호 확인">
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-2">
 							<label for="inputEmail" class="form-label">이메일</label>
 							<input type="text" class="form-control" id="inputEmail" placeholder="example">
 						</div>
 						<div class="col-md-2">
 							<label for="EmailType" class="form-label">구분</label>
-							<select id="EmailType" class="form-select">
+							<input disabled type="text" class="form-control" id="EmailType">
+						</div>
+						<div class="col-md-2">
+							<label for="selectEmailType" class="form-label">선택</label>
+							<select id="selectEmailType" class="form-select">
 								<option selected>@gmail.com</option>
 								<option>@naver.com</option>
 								<option>@yahoo.com</option>
 								<option>@hanmail.net</option>
-								<option>..직접입력</option>
+								<option>직접입력</option>
 							</select>
 						</div>
 						<div class="col-12">
@@ -101,7 +117,7 @@
 				const data = {
 					loginId: $('#inputLoginId').val(),
 					password: $('#inputPassword').val(),
-					email: $('#inputEmail').val(),
+					email: $('#inputEmail').val() + $("#EmailType").val(),
 					phoneNumber: $('#inputNumber').val(),
 					nickname: $('#inputNickname').val(),
 					realname: $('#inputRealName').val(),
