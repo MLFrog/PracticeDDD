@@ -72,8 +72,8 @@
 						<div class="col-md-1">
 							<button type="button" id="idDuplicateChk" class="btn btn-outline-warning" >확인</button>
 						</div>
-						<div class="col-md-5">
-							<p id="idDupChkMessage"></p>
+						<div class="col-md-1">
+							<button type="button" id="idDuplicateChkTrue" class="btn btn-outline-warning d-none" >수정</button>
 						</div>
 						<div class="col-md-6">
 							<input type="password" class="form-control" id="inputPassword" placeholder="비밀번호">
@@ -174,13 +174,18 @@
 						data: JSON.stringify(data),
 						contentType: 'application/json; charset=utf-8',
 						success: function(response) {
-							alert('회원가입이 완료되었습니다.');
+							showModal('회원가입', '회원가입이 완료되었습니다.');
 						},
 						error: function(error) {
-							alert('회원가입에 실패했습니다.');
+							showModal('회원가입', '회원가입중 서버 오류 발생.');
 						}
 					});
 				}
+			});
+			$("#idDuplicateChkTrue").click(function() {
+				$("#inputLoginId").prop("disabled", false);
+				$("#idDuplicateChk").removeClass('btn btn-outline-success').addClass('btn btn-outline-warning').removeClass('disabled');
+				$("#idDuplicateChkTrue").addClass('d-none');
 			});
 
 			$("#idDuplicateChk").click(function() {
@@ -199,6 +204,7 @@
 								$("#inputLoginId").prop("disabled", true);
 								$("#idDuplicateChk").removeClass('btn btn-outline-warning').addClass('btn btn-outline-success').addClass('disabled');
 								showModal('아이디중복확인', '사용가능한 아이디 입니다.');
+								$("#idDuplicateChkTrue").removeClass('d-none');
 							}else {
 								showModal('아이디중복확인', '이미 사용중인 아이디 입니다.');
 							}
