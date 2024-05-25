@@ -26,4 +26,11 @@ public class SignUpController {
     public void saveMember(@RequestBody SignUpObject data) {
         memberService.signUp(data);
     }
+
+    @ResponseBody
+    @PostMapping(value = "/signUp/idDupChk",produces = "application/json")
+    public boolean idDupChk(@RequestBody SignUpObject data) {
+        boolean chk = memberService.comfirmDupId(data);
+        return chk;
+    }
 }

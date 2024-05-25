@@ -15,7 +15,7 @@
 	<style>
 		#passwordMessage {
 			font-size: 0.875em;
-			height: 1.5em;
+			height: 1em;
 		}
 
 		.error {
@@ -69,8 +69,11 @@
 						<div class="col-md-6">
 							<input type="text" class="form-control" id="inputLoginId" placeholder="아이디">
 						</div>
-						<div class="col-md-6">
-							<button type="submit" class="btn btn-outline-warning">확인</button>
+						<div class="col-md-1">
+							<button type="button" id="idDuplicateChk" class="btn btn-outline-warning" >확인</button>
+						</div>
+						<div class="col-md-5">
+							<p id="idDupChkMessage"></p>
 						</div>
 						<div class="col-md-6">
 							<input type="password" class="form-control" id="inputPassword" placeholder="비밀번호">
@@ -133,6 +136,23 @@
 			<footer th:replace="common/Footer::footer"></footer>
 		</div>
 	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="showModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="showModalTitle"></h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<script>
 		$(document).ready(function() {
 			$("#signUpBtn").click(function() {
@@ -160,6 +180,35 @@
 							alert('회원가입에 실패했습니다.');
 						}
 					});
+				}
+			});
+
+			$("#idDuplicateChk").click(function() {
+				if($("#inputLoginId").val().trim() !== ""){
+					const data = {
+						loginId: $('#inputLoginId').val()
+					};
+
+					$.ajax({
+						type: 'POST',
+						url: '/signUp/idDupChk',
+						data: JSON.stringify(data),
+						contentType: 'application/json; charset=utf-8',
+						success: function(response) {
+							if(response) {
+								$("#inputLoginId").prop("disabled", true);
+								$("#idDuplicateChk").removeClass('btn btn-outline-warning').addClass('btn btn-outline-success').addClass('disabled');
+								showModal('아이디중복확인', '사용가능한 아이디 입니다.');
+							}else {
+								showModal('아이디중복확인', '이미 사용중인 아이디 입니다.');
+							}
+						},
+						error: function(error) {
+							showModal('아이디중복확인', '아이디 중복체크중 서버오류 발생.');
+						}
+					});
+				}else{
+					showModal('아이디중복확인', '아이디입력후 시도해주세요.');
 				}
 			});
 
@@ -202,6 +251,13 @@
 				}
 
 				return isValid;
+			}
+
+			function showModal(title, content) {
+				let modal = new bootstrap.Modal($("#showModal"));
+				$("#showModalTitle").textContent = title;
+				document.querySelector('#showModal .modal-body').textContent = content;
+				modal.show();
 			}
 		});
 	</script>
