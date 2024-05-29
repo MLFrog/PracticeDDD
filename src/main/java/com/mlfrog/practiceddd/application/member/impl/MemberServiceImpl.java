@@ -9,6 +9,7 @@ import com.mlfrog.practiceddd.domain.member.MemberRepository;
 import com.mlfrog.practiceddd.domain.member.convert.MemberConverter;
 import com.mlfrog.practiceddd.domain.member.convert.impl.JpaMemberConverter;
 import com.mlfrog.practiceddd.domain.member.repository.impl.JpaMemberRepository;
+import com.mlfrog.practiceddd.domain.member.roles.Roles;
 import com.mlfrog.practiceddd.infrastructure.jpa.entity.MemberJpaEntity;
 import com.mlfrog.practiceddd.infrastructure.jpa.repository.MemberJpaRepository;
 import com.mlfrog.practiceddd.presentation.api.v1.member.obj.SignUpObject;
@@ -52,6 +53,7 @@ public class MemberServiceImpl implements MemberService {
         member.setNickname(data.getNickname());
         member.setRealname(data.getRealname());
         member.setRoles(data.getRoles());
+        member.setAgreeTp(data.getAgreeTp());
 
         member.save(this.repository);
     }

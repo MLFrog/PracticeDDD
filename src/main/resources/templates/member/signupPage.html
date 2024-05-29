@@ -165,9 +165,10 @@
 						phoneNumber: $('#inputNumber').val(),
 						nickname: $('#inputNickname').val(),
 						realname: $('#inputRealName').val(),
-						roles: $('#inputRoles').val()
+						roles: getRoleCode(),
+						AGREE: getAgreeString()
 					};
-
+	console.log(data);
 					$.ajax({
 						type: 'POST',
 						url: '/signUp/save',
@@ -256,6 +257,18 @@
 					isValid = false;
 				}
 
+				if ($("#passwordMessage").text()!=="비밀번호가 일치합니다.")
+					isValid = false;
+
+				if (!$("#agreeCheck").is(':checked')){
+					showModal('개인정보수집동의', '개인정보 수집 동의후 회원가입이 가능합니다.');
+					return false;
+				}
+
+				if (!$('#inputLoginId').is(':disabled')){
+					showModal('아이디중복확인', '사용가능 아이디인지 확인후 회원가입이 가능합니다.');
+					return  false;
+				}
 				return isValid;
 			}
 
@@ -265,6 +278,26 @@
 				document.querySelector('#showModal .modal-body').textContent = content;
 				modal.show();
 			}
+
+			function getAgreeString() {
+				let agreeVal = "";
+				if($("#agreeCheck").is(':checked'))
+					agreeVal = 'T';
+				else agreeVal = 'F';
+
+				return agreeVal;
+			}
+
+			function getRoleCode() {
+				let code = $('#inputRoles').val();
+				let returnCode = '';
+				if(code==='ADMIN'){
+					returnCode = 'ADMIN';
+				}else
+					returnCode = 'NORMAL';
+				return returnCode;
+			}
+
 		});
 	</script>
 	<script src="vendor/jquery/jquery.min.js"></script>

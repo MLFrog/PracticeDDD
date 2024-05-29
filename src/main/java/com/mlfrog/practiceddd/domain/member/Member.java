@@ -19,6 +19,7 @@ public class Member {
     private String realname;
     private Boolean emailVerifiedTp;
     private Roles roles;
+    private String agreeTp;
     private Instant createdAt;
     private Instant updatedAt;
 

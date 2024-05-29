@@ -12,4 +12,5 @@ public class SignUpObject {
 	private String nickname;
 	private String realname;
 	private Roles roles;
+	private String agreeTp;
 }
