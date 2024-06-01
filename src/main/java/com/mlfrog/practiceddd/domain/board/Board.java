@@ -19,9 +19,11 @@ public class Board {
     private Instant createdAt;
     private Instant updatedAt;
 
-    public void insert(BoardRepository repository) {
+    public void save(BoardRepository repository) {
         Assert.notNull(this.title, "Boardtitle 값은 null일 수 없습니다.");
-        System.out.println("Board의 insert까지는 탐" + this);
-        repository.insert(this);
+        
+        repository.save(this);
     }
+
+
 }

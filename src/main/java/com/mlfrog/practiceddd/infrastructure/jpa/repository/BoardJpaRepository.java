@@ -12,6 +12,6 @@ public interface BoardJpaRepository extends JpaRepository<BoardJpaEntity, Long>{
 	
 	List<BoardJpaEntity> findAll(); // 게시글 전체조회
     
-	BoardJpaEntity findByBoardId(Long boardId); // 게시글 번호로 조회
+	BoardJpaEntity findByBoardId(Long boardId);// 게시글 번호로 조회
 
 }

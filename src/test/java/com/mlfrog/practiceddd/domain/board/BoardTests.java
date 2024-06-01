@@ -1,5 +1,9 @@
 package com.mlfrog.practiceddd.domain.board;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,13 +35,47 @@ public class BoardTests {
     }
 
     @Test
-    public void 게시글저장테스트() {
-    	Board tmp = this.factory.getInstance();
+    public void 게시글테스트() {
+    	//게시글 저장
+    	Board board1 = this.factory.getInstance();
     	
-        tmp.setNickname("닉네임");
-        tmp.setTitle("제목입니다.");
-        tmp.setContent("내용입니다.");
-        System.out.println(tmp);
-        tmp.insert(this.repository);
+    	board1.setNickname("닉네임");
+    	board1.setTitle("제목입니다.");
+    	board1.setContent("내용입니다.");
+    	board1.setCreatedAt(Instant.now());
+
+    	board1.save(this.repository);
+        
+    	board1 = repository.findByBoardId((long)1);
+    	System.out.println("게시글 생성 테스트 : " + board1);
+        
+    	//게시글 목록 조회
+        List<Board> boardList = repository.findAll();
+        System.out.println("게시글 목록 조회 테스트 : " + boardList.size());
+
+        //게시글 조회
+        Board board2 = repository.findByBoardId((long)1);
+        System.out.println("게시글 조회 테스트 : " + board2);
+        
+        //게시글 수정        
+        Board board3 = repository.findByBoardId((long)1);
+        board3.setTitle("수정된 제목입니다.");
+        
+        repository.save(board3);
+        
+        board3 = repository.findByBoardId((long)1);
+        System.out.println("게시글 수정 테스트 : " + board3 );
+        
+        //게시글 삭제
+        Board board4 = repository.findByBoardId((long)1);
+        board4.setExpirYn("Y");
+        board4.setTitle("삭제된 게시물입니다.");
+        
+        repository.save(board4);
+        
+        board4 = repository.findByBoardId((long)1);
+        System.out.println("게시글 삭제 테스트 : " +  board4.getExpirYn());
     }
+   
+
 }

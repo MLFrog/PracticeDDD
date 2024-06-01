@@ -4,15 +4,11 @@ import java.util.List;
 
 public interface BoardRepository {
 	
-	void insert(Board board);
+	void save(Board board);
 	
-	void update(Board board);
+	List<Board> findAll();
 	
-	void delete(Long boardId);
-	
-	List<Board>  getAllBoard();
-	
-	Board getOneBoardByBoardId(Long boardId);
+	Board findByBoardId(Long boardId);
 
 
 }
