@@ -171,11 +171,11 @@
 	console.log(data);
 					$.ajax({
 						type: 'POST',
-						url: '/signUp/save',
+						url: '/sign-up/save',
 						data: JSON.stringify(data),
 						contentType: 'application/json; charset=utf-8',
 						success: function(response) {
-							showModal('회원가입', '회원가입이 완료되었습니다.');
+							showModal('회원가입', '회원가입이 완료되었습니다. 이메일을 확인해주세요.');
 						},
 						error: function(error) {
 							showModal('회원가입', '회원가입중 서버 오류 발생.');
@@ -197,7 +197,7 @@
 
 					$.ajax({
 						type: 'POST',
-						url: '/signUp/idDupChk',
+						url: '/signUp/idcheck',
 						data: JSON.stringify(data),
 						contentType: 'application/json; charset=utf-8',
 						success: function(response) {
