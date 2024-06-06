@@ -6,6 +6,7 @@ import lombok.Data;
 import org.springframework.util.Assert;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @DomainEntity
@@ -22,6 +23,10 @@ public class Member {
     private String agreeTp;
     private Instant createdAt;
     private Instant updatedAt;
+
+    private String token;
+    private LocalDateTime expieredAt;
+
 
     //멤버 정보 저장
     public void save(MemberRepository repository) {

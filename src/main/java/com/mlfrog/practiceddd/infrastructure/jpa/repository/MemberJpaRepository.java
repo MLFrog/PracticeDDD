@@ -12,4 +12,6 @@ public interface MemberJpaRepository extends JpaRepository<MemberJpaEntity, Long
 
     List<MemberJpaEntity> findAll(); //리스트 형태로 회원정보 전체조회
 
+    MemberJpaEntity findByEmail(String email);
+
 }
