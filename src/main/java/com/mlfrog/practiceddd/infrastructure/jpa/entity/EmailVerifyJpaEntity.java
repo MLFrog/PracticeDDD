@@ -13,10 +13,10 @@ public class EmailVerifyJpaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "row_id")
-    private Integer rowId;
+    private Long rowId;
 
     @Column(name = "member_row_id")
-    private Integer memberRowId;
+    private String memberLoginId;
 
     @Column(name = "token")
     private String token;
@@ -24,7 +24,7 @@ public class EmailVerifyJpaEntity {
     @Column(name = "created_at")
     private Timestamp createdAt;
 
-    @Column(name = "expired_at")
-    private Timestamp expiredAt;
+    @Column(name = "expire_at")
+    private Timestamp expireAt;
 }
 
