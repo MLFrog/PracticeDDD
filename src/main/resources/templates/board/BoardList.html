@@ -13,10 +13,10 @@
 </head>
 <body id="page-top">
 	<div id="wrapper">
-		<header th:replace="common/Sidebar::header"></header>
+		<header th:replace="~{common/Sidebar::header}"></header>
 		<div id="content-wrapper" class="d-flex flex-column">
 			<div id="content">
-				<header th:replace="common/Header::header"></header>
+				<header th:replace="~{common/Header::header}"></header>
 				<div class="container-fluid">
 					<div class="float-right" style="margin: 20px 5%;">
 						<a role="button" class="btn btn-primary" href="BoardWrite">글 작성하기</a>
@@ -43,7 +43,7 @@
 					</div>
 				</div>
 			</div>
-			<footer th:replace="common/Footer::footer"></footer>
+			<footer th:replace="~{common/Footer::footer}"></footer>
 		</div>
 	</div>
 

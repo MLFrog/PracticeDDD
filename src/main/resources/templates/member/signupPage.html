@@ -60,10 +60,10 @@
 </head>
 <body id="page-top">
 	<div id="wrapper">
-		<header th:replace="common/Sidebar::header"></header>
+		<header th:replace="~{common/Sidebar::header}"></header>
 		<div id="content-wrapper" class="d-flex flex-column">
 			<div id="content">
-				<header th:replace="common/Header::header"></header>
+				<header th:replace="~{common/Header::header}"></header>
 				<div class="container-fluid">
 					<form class="row g-3">
 						<div class="col-md-6">
@@ -133,7 +133,7 @@
 					</form>
 				</div>
 			</div>
-			<footer th:replace="common/Footer::footer"></footer>
+			<footer th:replace="~{common/Footer::footer}"></footer>
 		</div>
 	</div>
 	<!-- Modal -->
@@ -168,7 +168,6 @@
 						roles: getRoleCode(),
 						AGREE: getAgreeString()
 					};
-	console.log(data);
 					$.ajax({
 						type: 'POST',
 						url: '/sign-up/save',
@@ -197,7 +196,7 @@
 
 					$.ajax({
 						type: 'POST',
-						url: '/signUp/idcheck',
+						url: '/sign-up/idcheck',
 						data: JSON.stringify(data),
 						contentType: 'application/json; charset=utf-8',
 						success: function(response) {
