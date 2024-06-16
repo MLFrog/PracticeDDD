@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 <link href="css/sb-admin-2.min.css" rel="stylesheet">
 <!-- Editor's Style -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css"/>
 <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 </head>
 <body id="page-top">
@@ -20,14 +21,15 @@
 			<div id="content">
 				<header th:replace="common/Header::header"></header>
 				<div class="container-fluid">
-					<form class="row g-3">
+					<form class="row g-3" action="/write" method="post">
+						<input type="hidden" id="state" name="state" value="I">
 						<div class="col-md-8" style="float: none; margin: 0 auto;">
-							<input type="text" class="form-control" id="title" placeholder="제목">
-							<div id="content2" style="margin-top: 20px;"></div>
+							<input type="text" class="form-control" name="title" placeholder="제목">
+							<div id="editor" style="margin-top: 20px;"></div>
 						</div>
-						<div class="float-right" style="margin: 20px 17%;">
+						<div class="float-right" style="margin: 20px 17.5%;">
 							<a role="button" class="btn btn-outline-secondary" href="BoardList">돌아가기</a>
-							<a role="button" class="btn btn-primary" href="BoardList">제출하기</a>
+							<button type="submit" role="button" class="btn btn-primary" >제출하기</button>
 						</div>
 					</form>
 				</div>
@@ -35,21 +37,19 @@
 			<footer th:replace="common/Footer::footer"></footer>
 		</div>
 	</div>
-	<script src="js/demo/chart-pie-demo.js"></script>
 	<script src="vendor/jquery/jquery.min.js"></script>
 	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 	<script src="js/sb-admin-2.min.js"></script>
 	<script src="vendor/chart.js/Chart.min.js"></script>
-	<script src="js/demo/chart-area-demo.js"></script>
 	<!-- Editor's Script -->
 	<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 	<script>
 		const editor = new toastui.Editor({
-			el : document.querySelector('#content2'), // 에디터를 적용할 요소 (컨테이너)
+			el : document.querySelector('#editor'), // 에디터를 적용할 요소 (컨테이너)
 			height : '500px', // 에디터 영역의 높이 값 (OOOpx || auto)
 			initialEditType : 'wysiwyg', // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
-			initialValue : '내용을 입력해 주세요.', // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
+			initialValue : '', // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
 			previewStyle : 'vertical' // 마크다운 프리뷰 스타일 (tab || vertical)
 		});
 	</script>

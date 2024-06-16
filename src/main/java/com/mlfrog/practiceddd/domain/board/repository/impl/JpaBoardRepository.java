@@ -3,7 +3,6 @@ package com.mlfrog.practiceddd.domain.board.repository.impl;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,14 +32,13 @@ public class JpaBoardRepository implements BoardRepository{
 	public void save(Board board)
 	{
     	Assert.notNull(board,  "board는 Null일 수 없습니다.");
-
     	this.jpaRepository.save(convert(board));
 	}  
 	
     @Override
-	public List<Board> findAll()
+	public List<Board> findAllByOrderByBoardIdAsc()
 	{
-    	return Optional.ofNullable(this.jpaRepository.findAll())
+    	return Optional.ofNullable(this.jpaRepository.findAllByOrderByBoardIdAsc())
     			.map(boardList -> boardList.stream()
     					.map(this.converter::convert)
 			 			.collect(Collectors.toList()))
@@ -58,17 +56,18 @@ public class JpaBoardRepository implements BoardRepository{
 	}
     
     private BoardJpaEntity convert(Board data) {
+    	
     	BoardJpaEntity obj = new BoardJpaEntity();
     	
-        obj.setBoardId(Optional.ofNullable(data.getBoardId()).orElse((long)0));
-        obj.setNickname(Optional.ofNullable(data.getNickname().toString()).orElse(""));
-        obj.setTitle(Optional.ofNullable(data.getTitle().toString()).orElse(""));
-        obj.setContent(Optional.ofNullable(data.getContent().toString()).orElse(""));
-        obj.setExpirYn(Optional.ofNullable(data.getExpirYn()).orElse("N"));
-        obj.setCreatedAt(Optional.ofNullable(Timestamp.from(data.getCreatedAt())).orElse(Timestamp.from(Instant.now())));
-        obj.setUpdatedAt(Timestamp.from(Instant.now())); 
+    	obj.setBoardId(Optional.ofNullable(Long.valueOf(data.getBoardId().toString())).orElse(0l));
+		obj.setNickname(String.valueOf(data.getNickname()));
+		obj.setTitle(String.valueOf(data.getTitle()));
+		obj.setContent(String.valueOf(data.getContent()));
+		obj.setExpirYn(Optional.ofNullable(data.getExpirYn()).orElse("N"));
+		obj.setCreatedAt(Optional.ofNullable(data.getCreatedAt()).map(Timestamp::from).orElse(Timestamp.from(Instant.now())));
+        obj.setUpdatedAt(Optional.ofNullable(data.getUpdatedAt()).map(Timestamp::from).orElse(Timestamp.from(Instant.now()))); 
 
         return obj;
     }
-
+    
 }

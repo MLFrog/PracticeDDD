@@ -10,8 +10,8 @@ import com.mlfrog.practiceddd.infrastructure.jpa.entity.BoardJpaEntity;
 @Repository("BoardJpaRepository")
 public interface BoardJpaRepository extends JpaRepository<BoardJpaEntity, Long>{
 	
-	List<BoardJpaEntity> findAll(); // 게시글 전체조회
+	List<BoardJpaEntity> findAllByOrderByBoardIdAsc(); // 게시글 전체조회
     
-	BoardJpaEntity findByBoardId(Long boardId);// 게시글 번호로 조회
+	BoardJpaEntity findByBoardId(long boardId);// 게시글 번호로 조회
 
 }

@@ -1,6 +1,5 @@
 package com.mlfrog.practiceddd.domain.board;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 
@@ -35,47 +34,60 @@ public class BoardTests {
     }
 
     @Test
-    public void 게시글테스트() {
-    	//게시글 저장
-    	Board board1 = this.factory.getInstance();
+    public void 게시글저장() {
+    	Board board = this.factory.getInstance();
     	
-    	board1.setNickname("닉네임");
-    	board1.setTitle("제목입니다.");
-    	board1.setContent("내용입니다.");
-    	board1.setCreatedAt(Instant.now());
-
-    	board1.save(this.repository);
+    	board.setBoardId(BoardId.of(0));
+    	board.setNickname("닉네임");
+    	board.setTitle("제목입니다.");
+    	board.setContent("내용입니다.");
+    	
+    	board.save(this.repository);
         
-    	board1 = repository.findByBoardId((long)1);
-    	System.out.println("게시글 생성 테스트 : " + board1);
+    	board = repository.findByBoardId(1l);
+    	System.out.println("게시글 생성 테스트 : " + board);
         
-    	//게시글 목록 조회
-        List<Board> boardList = repository.findAll();
-        System.out.println("게시글 목록 조회 테스트 : " + boardList.size());
-
-        //게시글 조회
-        Board board2 = repository.findByBoardId((long)1);
-        System.out.println("게시글 조회 테스트 : " + board2);
-        
-        //게시글 수정        
-        Board board3 = repository.findByBoardId((long)1);
-        board3.setTitle("수정된 제목입니다.");
-        
-        repository.save(board3);
-        
-        board3 = repository.findByBoardId((long)1);
-        System.out.println("게시글 수정 테스트 : " + board3 );
-        
-        //게시글 삭제
-        Board board4 = repository.findByBoardId((long)1);
-        board4.setExpirYn("Y");
-        board4.setTitle("삭제된 게시물입니다.");
-        
-        repository.save(board4);
-        
-        board4 = repository.findByBoardId((long)1);
-        System.out.println("게시글 삭제 테스트 : " +  board4.getExpirYn());
     }
    
+    @Test
+    public void 게시글목록조회() {
+    	
+    	 List<Board> boardList = repository.findAllByOrderByBoardIdAsc();
+         System.out.println("게시글 목록 조회 테스트 : " + boardList.size());
 
+    }
+
+    @Test
+    public void 게시글조회() {
+    	
+    	 Board board = repository.findByBoardId(1l);
+         System.out.println("게시글 조회 테스트 : " + board);
+         
+    }
+    
+    @Test 
+    public void 게시글수정() {
+	   
+	   Board board = repository.findByBoardId(1l);
+       
+       board.setContent("수정된 제목입니다.");
+       
+       repository.save(board);
+       
+       board = repository.findByBoardId(1l);
+       System.out.println("게시글 수정 테스트 : " + board );
+    }
+    
+    @Test
+    public void 게시글삭제() {
+    	 Board board = repository.findByBoardId(1l);
+         
+         board.setExpirYn("Y");
+         board.setTitle("삭제된 게시물입니다.");
+         
+         repository.save(board);
+         
+         board = repository.findByBoardId(1l);
+         System.out.println("게시글 삭제 테스트 : " +  board.getExpirYn());
+    }
 }

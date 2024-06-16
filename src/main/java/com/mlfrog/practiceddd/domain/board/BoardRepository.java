@@ -6,7 +6,7 @@ public interface BoardRepository {
 	
 	void save(Board board);
 	
-	List<Board> findAll();
+	List<Board> findAllByOrderByBoardIdAsc();
 	
 	Board findByBoardId(Long boardId);
 
