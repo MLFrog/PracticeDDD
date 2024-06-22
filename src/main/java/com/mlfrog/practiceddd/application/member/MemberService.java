@@ -7,4 +7,6 @@ public interface MemberService{
     public void signUp(SignUpObject data);
 
     public boolean comfirmDupId(SignUpObject data);
+
+    public void emailVerifyComplete(String id);
 }

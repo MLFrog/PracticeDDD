@@ -4,19 +4,12 @@ package com.mlfrog.practiceddd.application.member.impl;
 import com.mlfrog.practiceddd.application.emailVerify.EmailVerifyService;
 import com.mlfrog.practiceddd.application.encrypt.HashConfig;
 import com.mlfrog.practiceddd.application.member.MemberService;
-import com.mlfrog.practiceddd.domain.email.Email;
-import com.mlfrog.practiceddd.domain.email.EmailFactory;
-import com.mlfrog.practiceddd.domain.email.EmailRepository;
-import com.mlfrog.practiceddd.domain.email.convert.EmailVerifyConverter;
-import com.mlfrog.practiceddd.domain.email.convert.impl.JpaEmailVerifyConverter;
-import com.mlfrog.practiceddd.domain.email.repository.impl.JpaEmailRepository;
 import com.mlfrog.practiceddd.domain.member.Member;
 import com.mlfrog.practiceddd.domain.member.MemberFactory;
 import com.mlfrog.practiceddd.domain.member.MemberRepository;
 import com.mlfrog.practiceddd.domain.member.convert.MemberConverter;
 import com.mlfrog.practiceddd.domain.member.convert.impl.JpaMemberConverter;
 import com.mlfrog.practiceddd.domain.member.repository.impl.JpaMemberRepository;
-import com.mlfrog.practiceddd.infrastructure.jpa.entity.EmailVerifyJpaEntity;
 import com.mlfrog.practiceddd.infrastructure.jpa.entity.MemberJpaEntity;
 import com.mlfrog.practiceddd.infrastructure.jpa.repository.EmailVerifyJpaRepository;
 import com.mlfrog.practiceddd.infrastructure.jpa.repository.MemberJpaRepository;
@@ -26,8 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -40,11 +32,6 @@ public class MemberServiceImpl implements MemberService {
     private MemberConverter<MemberJpaEntity> converter;
 
     private final MemberJpaRepository jpaRepository;
-    private EmailFactory emailFactory;
-
-    private EmailRepository emailRepository;
-
-    private EmailVerifyConverter<EmailVerifyJpaEntity> emailconverter;
 
     private final EmailVerifyJpaRepository emailJpaRepository;
 
@@ -59,37 +46,38 @@ public class MemberServiceImpl implements MemberService {
         this.factory = new MemberFactory();
         this.converter = new JpaMemberConverter();
         this.repository = new JpaMemberRepository(this.jpaRepository, this.converter);
-        this.emailFactory = new EmailFactory();
-        this.emailconverter = new JpaEmailVerifyConverter();
-        this.emailRepository = new JpaEmailRepository(this.emailJpaRepository, this.emailconverter);
     }
+
 
     /**
      * 회원가입 - 회원정보 입력및 저장
      */
+    @Transactional
     public void signUp(SignUpObject data) {
-        Member member = this.factory.getInstance();
-        Email verify = this.emailFactory.getInstance();
+        try {
+            Member member = this.factory.getInstance();
 
-        member.setLoginId(data.getLoginId());
-        member.setPassword(encryptPassword(data.getPassword()));
-        member.setEmail(data.getEmail());
-        member.setPhoneNumber(data.getPhoneNumber());
-        member.setNickname(data.getNickname());
-        member.setRealname(data.getRealname());
-        member.setRoles(data.getRoles());
-        member.setAgreeTp(data.getAgreeTp());
-        member.save(this.repository);
-        String token = createToken();
-        verify.setLoginId(data.getLoginId());
-        verify.setToken(token);
-        verify.save(this.emailRepository);
+            //멤버 데이터 저장
+            member.setLoginId(data.getLoginId());
+            member.setPassword(encryptPassword(data.getPassword()));
+            member.setEmail(data.getEmail());
+            member.setPhoneNumber(data.getPhoneNumber());
+            member.setNickname(data.getNickname());
+            member.setRealname(data.getRealname());
+            member.setRoles(data.getRoles());
+            member.setAgreeTp(data.getAgreeTp());
+            member.save(this.repository);
 
-        sendVerificationEmail(data.getEmail(),token);
+            //이메일 인증테이블 저장(3년 만료데이터 등) -> 가입 이메일로 인증메일 발송
+            emailVerifyService.saveSendEmail(data);
+        } catch (Exception e) {
+            // 필요한 로깅 및 예외 처리
+            throw new RuntimeException("회원가입 중 오류가 발생했습니다.", e);
+        }
     }
 
     /**
-     * 회원가입 - 중복 아이디 확인
+     * 회원가입 - 중복 아이디 확인w
      */
     public boolean comfirmDupId(SignUpObject data){
         boolean dupId = true;
@@ -103,6 +91,18 @@ public class MemberServiceImpl implements MemberService {
         return dupId;
     }
 
+    public void emailVerifyComplete(String id) {
+        //1
+        Member member = repository.findOnebyId(id);
+        member.setEmailVerifiedTp(true);
+        member.save(this.repository);
+
+        //2
+//        MemberJpaEntity entity = this.jpaRepository.findByLoginId(id);
+//        entity.setEmailVerifiedTp(true);
+//        this.jpaRepository.save(entity);
+    }
+
     public String encryptPassword(String password){
         String pass = "";
         try {
@@ -112,22 +112,14 @@ public class MemberServiceImpl implements MemberService {
         }
         return pass;
     }
+    /**
+     * 회원정보 수정
+     */
+//    public String updateMemberData(SignUpObject data){
+//
+//    }
 
-    public String createToken(){
-        String token = UUID.randomUUID().toString();
-        return token;
-    }
 
-    private void sendVerificationEmail(String email, String token) {
-        // 이메일 전송 로직 구현
-        String verificationLink = "http://localhost:9999/verify?token=" + token;
-        String emailContent = "<html>"
-                + "<body>"
-                + "<p>이메일 인증을 위해 아래 버튼을 클릭하세요:</p>"
-                + "<a href=\"" + verificationLink + "\" style=\"display: inline-block; padding: 10px 20px; font-size: 16px; color: #ffffff; background-color: #007bff; text-decoration: none;\">이메일 인증</a>"
-                + "</body>"
-                + "</html>";
-        emailVerifyService.sendEmail(email, "이메일 인증", emailContent);
-    }
+
 }
 
